@@ -8,9 +8,7 @@ public class PlayerInputController : MonoBehaviour {
 	public Transform worldObj;
 
 	public float mouseSwipeSensitivity = 100.0f, viveSwipeSensitivity = 1000.0f;
-	Vector2 swipeDirection;
-
-	Vector3 currentPos;
+	Vector3 swipeDirection;
 
 	void Awake() {
 		if (leftContObj) controllers.Add(new Controller(leftContObj));
@@ -18,7 +16,7 @@ public class PlayerInputController : MonoBehaviour {
 	}
 
 	void Update() {
-		GetKeyboardInputs();
+		//GetKeyboardInputs();
 		GetViveInputs();
 	}
 	void LateUpdate() {
@@ -37,15 +35,11 @@ public class PlayerInputController : MonoBehaviour {
 		foreach (Controller cont in controllers) {
 			SteamVR_Controller.Device c = cont.controller;
 
-			//if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
-			if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
-				currentPos = cont.trackedObj.transform.position;
-				Vector3 diff = currentPos - cont.lastPosition;
-
-				swipeDirection = new Vector2(diff.x * Time.deltaTime * viveSwipeSensitivity, diff.y * Time.deltaTime * viveSwipeSensitivity);
-
-				worldObj.RotateAround(worldObj.transform.position, headContObj.transform.right, swipeDirection.y);
-				worldObj.RotateAround(worldObj.transform.position, headContObj.transform.up, -swipeDirection.x);
+			if (c.GetPressDown(SteamVR_Controller.ButtonMask.Grip)) {
+				worldObj.GetComponent<HingeJoint>().connectedBody = cont.trackedObj.GetComponent<Rigidbody>();
+			}
+			if (c.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
+				worldObj.GetComponent<HingeJoint>().connectedBody = null;
 			}
 		}
 	}
@@ -59,7 +53,6 @@ public class PlayerInputController : MonoBehaviour {
 
 		if (Input.GetKey(KeyCode.Space)) {
 			swipeDirection = new Vector3(Input.GetAxis("Mouse X") * Time.deltaTime * mouseSwipeSensitivity, Input.GetAxis("Mouse Y") * Time.deltaTime * mouseSwipeSensitivity);
-			
 
 			worldObj.RotateAround(worldObj.transform.position, headContObj.transform.right, swipeDirection.y);
 			worldObj.RotateAround(worldObj.transform.position, headContObj.transform.up, -swipeDirection.x);
