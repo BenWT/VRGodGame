@@ -76,9 +76,9 @@ public class Controller {
 	}
 
 	public void Sync() {
-		lastPosition = trackedObj.transform.localPosition;
+		lastPosition = trackedObj.transform.position;
 	}
 	public Vector3 GetPosition() {
-		return trackedObj.transform.localPosition;
+		return trackedObj.transform.position;
 	}
 }
