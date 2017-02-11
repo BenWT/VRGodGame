@@ -7,7 +7,7 @@ public class PlayerInputController : MonoBehaviour {
 	public GameObject leftContObj, rightContObj, headContObj;
 	public Transform worldObj;
 
-	public float mouseSwipeSensitivity = 100.0f, viveSwipeSensitivity = 100.0f;
+	public float mouseSwipeSensitivity = 100.0f, viveSwipeSensitivity = 1000.0f;
 
 
 	Vector3 swipeDirection;
@@ -18,8 +18,8 @@ public class PlayerInputController : MonoBehaviour {
 	}
 
 	void Update() {
-		GetViveInputs();
-		//GetKeyboardInputs();
+		//GetViveInputs();
+		GetKeyboardInputs();
 	}
 	void LateUpdate() {
 		foreach (Controller cont in controllers) {
@@ -58,7 +58,11 @@ public class PlayerInputController : MonoBehaviour {
 
 		if (Input.GetKey(KeyCode.Space)) {
 			swipeDirection = new Vector3(Input.GetAxis("Mouse X") * Time.deltaTime * mouseSwipeSensitivity, Input.GetAxis("Mouse Y") * Time.deltaTime * mouseSwipeSensitivity, 0);
-			worldObj.eulerAngles += new Vector3(swipeDirection.y, -swipeDirection.x, 0);
+
+			//worldObj.eulerAngles += new Vector3(swipeDirection.y, -swipeDirection.x, 0);
+			//worldObj.rotation += Quaternion.Euler(swipeDirection.y, -swipeDirection.x, 0);
+			worldObj.RotateAround(worldObj.transform.position, headContObj.transform.right, swipeDirection.y);
+			worldObj.RotateAround(worldObj.transform.position, headContObj.transform.up, -swipeDirection.x);
 		}
 	}
 }
