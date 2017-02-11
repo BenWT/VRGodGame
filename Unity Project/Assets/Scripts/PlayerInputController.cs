@@ -20,9 +20,6 @@ public class PlayerInputController : MonoBehaviour {
 	void Update() {
 		GetKeyboardInputs();
 		GetViveInputs();
-
-		worldObj.RotateAround(worldObj.transform.position, headContObj.transform.right, swipeDirection.y);
-		worldObj.RotateAround(worldObj.transform.position, headContObj.transform.up, -swipeDirection.x);
 	}
 	void LateUpdate() {
 		foreach (Controller cont in controllers) {
@@ -42,11 +39,13 @@ public class PlayerInputController : MonoBehaviour {
 
 			//if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
 			if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
-				currentPos = cont.trackedObj.transform.InverseTransformPoint(worldObj.position);
-				Debug.Log(currentPos.x);
-				Debug.Log(currentPos.y);
+				currentPos = cont.trackedObj.transform.position;
+				Vector3 diff = currentPos - cont.lastPosition;
 
-				swipeDirection = new Vector2(currentPos.x * Time.deltaTime * viveSwipeSensitivity, currentPos.y * Time.deltaTime * viveSwipeSensitivity);
+				swipeDirection = new Vector2(diff.x * Time.deltaTime * viveSwipeSensitivity, diff.y * Time.deltaTime * viveSwipeSensitivity);
+
+				worldObj.RotateAround(worldObj.transform.position, headContObj.transform.right, swipeDirection.y);
+				worldObj.RotateAround(worldObj.transform.position, headContObj.transform.up, -swipeDirection.x);
 			}
 		}
 	}
@@ -60,6 +59,10 @@ public class PlayerInputController : MonoBehaviour {
 
 		if (Input.GetKey(KeyCode.Space)) {
 			swipeDirection = new Vector3(Input.GetAxis("Mouse X") * Time.deltaTime * mouseSwipeSensitivity, Input.GetAxis("Mouse Y") * Time.deltaTime * mouseSwipeSensitivity);
+			
+
+			worldObj.RotateAround(worldObj.transform.position, headContObj.transform.right, swipeDirection.y);
+			worldObj.RotateAround(worldObj.transform.position, headContObj.transform.up, -swipeDirection.x);
 		}
 	}
 }
