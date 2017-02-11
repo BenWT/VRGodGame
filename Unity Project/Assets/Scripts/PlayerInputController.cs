@@ -18,8 +18,8 @@ public class PlayerInputController : MonoBehaviour {
 	}
 
 	void Update() {
-		//GetViveInputs();
-		GetKeyboardInputs();
+		GetViveInputs();
+		//GetKeyboardInputs();
 	}
 	void LateUpdate() {
 		foreach (Controller cont in controllers) {
@@ -38,13 +38,11 @@ public class PlayerInputController : MonoBehaviour {
 			SteamVR_Controller.Device c = cont.controller;
 
 			//if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
-			if (c.GetHairTrigger()) {
+			if (c.GetHairTrigger() || c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
 				swipeDirection = cont.GetPosition() - cont.lastPosition;
 				swipeDirection *= Time.deltaTime * viveSwipeSensitivity;
-				worldObj.eulerAngles += new Vector3(swipeDirection.y, -swipeDirection.x, 0);
-				Debug.Log("Pressed trigger");
-				Debug.Log(swipeDirection.x);
-				Debug.Log(swipeDirection.y);
+				worldObj.RotateAround(worldObj.transform.position, headContObj.transform.right, swipeDirection.y);
+				worldObj.RotateAround(worldObj.transform.position, headContObj.transform.up, -swipeDirection.x);
 			}
 		}
 	}
