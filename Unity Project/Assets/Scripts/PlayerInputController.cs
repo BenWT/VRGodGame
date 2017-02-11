@@ -37,10 +37,14 @@ public class PlayerInputController : MonoBehaviour {
 		foreach (Controller cont in controllers) {
 			SteamVR_Controller.Device c = cont.controller;
 
-			if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
+			//if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
+			if (c.GetHairTrigger()) {
 				swipeDirection = cont.GetPosition() - cont.lastPosition;
 				swipeDirection *= Time.deltaTime * viveSwipeSensitivity;
 				worldObj.eulerAngles += new Vector3(swipeDirection.y, -swipeDirection.x, 0);
+				Debug.Log("Pressed trigger");
+				Debug.Log(swipeDirection.x);
+				Debug.Log(swipeDirection.y);
 			}
 		}
 	}
