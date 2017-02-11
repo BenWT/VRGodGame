@@ -33,13 +33,15 @@ public class PlayerInputController : MonoBehaviour {
 	if (controller.GetPress(SteamVR_Controller.ButtonMask.Grip)) Debug.Log(gameObject.name + " Grip Held");*/
 	void GetViveInputs() {
 		foreach (Controller cont in controllers) {
-			SteamVR_Controller.Device c = cont.controller;
+			if (cont.trackedObj.enabled) {
+				SteamVR_Controller.Device c = cont.controller;
 
-			if (c.GetPressDown(SteamVR_Controller.ButtonMask.Grip)) {
-				worldObj.GetComponent<HingeJoint>().connectedBody = cont.trackedObj.GetComponent<Rigidbody>();
-			}
-			if (c.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
-				worldObj.GetComponent<HingeJoint>().connectedBody = null;
+				if (c.GetPressDown(SteamVR_Controller.ButtonMask.Grip)) {
+					worldObj.GetComponent<HingeJoint>().connectedBody = cont.trackedObj.GetComponent<Rigidbody>();
+				}
+				if (c.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
+					worldObj.GetComponent<HingeJoint>().connectedBody = null;
+				}
 			}
 		}
 	}
