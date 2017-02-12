@@ -20,11 +20,6 @@ public class WorkerController : MonoBehaviour {
 
     void Update() {
 
-		Vector3 newPosition = new Vector3(-1, 0, 0) * (moveSpeed * Time.deltaTime);
-		newPosition = transform.position + newPosition;
-		newPosition.x = Mathf.Clamp(newPosition.x, -101, 126);
-		transform.position = newPosition;
-
 		if (planetGravity)
 		{
 			gravityDirection = (transform.position - civilisation.planet.position).normalized;
@@ -42,10 +37,7 @@ public class WorkerController : MonoBehaviour {
 		{
 			// retain tragetory 
 		}
-
-
-	
-		
+				
 
         if (timer >= 1) {
             //if (Random.Range(1, civilisation.values.birthRate) == civilisation.values.birthRate) GiveBirth();
