@@ -41,12 +41,17 @@ public class PlayerInputController : MonoBehaviour {
 				RaycastHit hit;
 
 				if (Physics.Raycast(cont.trackedObj.transform.position, cont.trackedObj.transform.forward, out hit)) {
-					/*if (hit.collider.tag == "Civilisation")
+					if (hit.collider.tag == "Civilisation")
 					{
 						CivilisationController civ = hit.collider.GetComponent<CivilisationController>();
-					}*/
+						civ.TakeHit(cont.type);
+					}
+				}
+			}
 
-					hit.transform.GetComponent<Renderer>().material.color = new Color(0, 255, 0);
+			if (c.GetHairTriggerUp()) {
+				foreach (CivilisationController civ in civilisations) {
+					
 				}
 			}
 		}

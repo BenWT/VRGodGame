@@ -38,39 +38,59 @@ public class CivilisationController : MonoBehaviour {
     }
 
 	public void TakeHit(GodType type) {
-		if (type != lastType)
-		{
+        if (type != lastType) {
 			godTypeTimer = 0;
 			godActivatedCounter = 0;
 		}
 
-		if (godTypeTimer >= 1.0f)
-		{
+        if (godTypeTimer >= 1.0f) {
 			godActivatedCounter++;
-			godTypeTimer = 0;	
+			godTypeTimer = 0;
 		}
 
-		if (type == requiredType)
-		{
-			if (type == GodType.Rain || type == GodType.Sun)
-			{
+        if (type == requiredType) {
+			if (type == GodType.Rain || type == GodType.Sun) {
 				if (godActivatedCounter == 1) values.statistic += 0.1f;
 				else values.statistic -= 0.1f;
 			}
-			else if (type == GodType.Birth)
-			{
+			else if (type == GodType.Birth) {
 				for (int i = 0; i < 5; i++) MakeWorker();
+                if (godActivatedCounter == 1) values.statistic += 0.1f;
+				else values.statistic -= 0.1f;
 			}
-			else if (type == GodType.Death)
-			{
+			else if (type == GodType.Death) {
 				for (int i = 0; i < 5; i++) KillWorker(i);
+                if (godActivatedCounter == 1) values.statistic += 0.1f;
+				else values.statistic -= 0.1f;
 			}
 		}
 		else
 		{
+            if (type == GodType.Rain || type == GodType.Sun) {
+                if (godActivatedCounter > 1) {
+                    values.statistic -= 0.1f;
+                    godActivatedCounter = 1;
+                }
+            }
+            else if (type == GodType.Birth) {
 
-		}
+            }
+            else if (type == GodType.Death) {
 
+            }
+            else if (type == GodType.Lightning) {
+
+            }
+            else if (type == GodType.Meteor) {
+
+            }
+            else if (type == GodType.Grab) {
+
+            }
+            else if (type == GodType.Squish) {
+
+            }
+        }
 		godTypeTimer += Time.deltaTime;
 	}
 }
