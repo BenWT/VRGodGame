@@ -38,7 +38,8 @@ public class PlayerInputController : MonoBehaviour {
 
 			if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
 				if (c.GetAxis() != Vector2.zero) {
-					worldObj.RotateAround(worldObj.position, Vector3.up, c.GetAxis().y * viveSwipeSensitivity * Time.deltaTime);
+					worldObj.RotateAround(worldObj.position, cont.trackedObj.transform.right, c.GetAxis().y * viveSwipeSensitivity * Time.deltaTime);
+					worldObj.RotateAround(worldObj.position, cont.trackedObj.transform.up, -c.GetAxis().x * viveSwipeSensitivity * Time.deltaTime);
 				}
 			}
 
