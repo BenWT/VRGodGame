@@ -54,14 +54,20 @@ public class CivilisationController : MonoBehaviour {
 				else values.statistic -= 0.1f;
 			}
 			else if (type == GodType.Birth) {
-				for (int i = 0; i < 5; i++) MakeWorker();
-                if (godActivatedCounter == 1) values.statistic += 0.1f;
-				else values.statistic -= 0.1f;
+				if (godTypeTimer == 0)
+				{
+					for (int i = 0; i < 5; i++) MakeWorker();
+					if (godActivatedCounter == 1) values.statistic += 0.1f;
+					else values.statistic -= 0.1f;
+				}
 			}
 			else if (type == GodType.Death) {
-				for (int i = 0; i < 5; i++) KillWorker(i);
-                if (godActivatedCounter == 1) values.statistic += 0.1f;
-				else values.statistic -= 0.1f;
+				if (godTypeTimer == 0)
+				{
+					for (int i = 0; i < 5; i++) KillWorker(i);
+					if (godActivatedCounter == 1) values.statistic += 0.1f;
+					else values.statistic -= 0.1f;
+				}
 			}
 		}
 		else
@@ -72,26 +78,31 @@ public class CivilisationController : MonoBehaviour {
                     godActivatedCounter = 1;
                 }
             }
-            else if (type == GodType.Birth) {
-
-            }
-            else if (type == GodType.Death) {
-
-            }
-            else if (type == GodType.Lightning) {
-
-            }
-            else if (type == GodType.Meteor) {
-
-            }
-            else if (type == GodType.Grab) {
-
-            }
-            else if (type == GodType.Squish) {
-
-            }
+            else if (type == GodType.Birth)
+			{
+				if (godActivatedCounter > 1)
+				{
+					for (int i = 0; i < 5; i++) MakeWorker();
+					godActivatedCounter = 1;
+				}
+			}
+            else if (type == GodType.Death)
+			{
+				if (godActivatedCounter > 1)
+				{
+					for (int i = 0; i < 5; i++) KillWorker(i);
+					godActivatedCounter = 1;
+				}
+			}
         }
+
 		godTypeTimer += Time.deltaTime;
+	}
+
+	public void DoShot(GodType type){
+
+
+
 	}
 }
 
@@ -111,3 +122,17 @@ public class CivilisationValues {
         this.maxWorkerCount = this.initialWorkerCount * 2;
     }
 }
+
+/*
+            else if (type == GodType.Lightning) {
+
+            }
+            else if (type == GodType.Meteor) {
+
+            }
+            else if (type == GodType.Grab) {
+
+            }
+            else if (type == GodType.Squish) {
+
+            }*/
