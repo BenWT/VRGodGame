@@ -48,12 +48,6 @@ public class PlayerInputController : MonoBehaviour {
 					}
 				}
 			}
-
-			if (c.GetHairTriggerUp()) {
-				foreach (CivilisationController civ in civilisations) {
-					
-				}
-			}
 		}
 	}
 
