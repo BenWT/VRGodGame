@@ -9,43 +9,44 @@ public class WorkerController : MonoBehaviour {
 	public bool planetGravity = true;
 	int index;
     float timer;
-    Vector3 gravityDirection, direction;
+	Vector3 gravityDirection;
+	Vector2 direction;
+
+	void Start()
+	{
+		direction = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+	}
 
 	public void Setup(int index) {
         this.index = index;
         timer += Random.Range(0.0f, 1.0f);
-		direction = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
+	}
 
+	public void UpdateDirection()
+	{
+		direction = -direction;
+		direction += new Vector2(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
 	}
 
     void Update() {
 
-		Vector3 newPosition = new Vector3(-1, 0, 0) * (moveSpeed * Time.deltaTime);
-		newPosition = transform.position + newPosition;
-		newPosition.x = Mathf.Clamp(newPosition.x, -101, 126);
-		transform.position = newPosition;
-
 		if (planetGravity)
 		{
+			transform.position += transform.up * Time.deltaTime * direction.x;
+			transform.position += transform.right * Time.deltaTime * direction.y;
+
 			gravityDirection = (transform.position - civilisation.planet.position).normalized;
 			transform.LookAt(civilisation.planet, transform.up);
-
-			transform.localPosition += direction * (moveSpeed * Time.deltaTime);
 
 			Vector3 difference = transform.position - civilisation.planet.position;
 			float mag = difference.magnitude;
 			transform.position = civilisation.planet.position + Vector3.ClampMagnitude(difference, Mathf.Lerp(mag, radius, Time.deltaTime * gravities)); //reverse pythagoras
-
-			
 		}
 		else
 		{
 			// retain tragetory 
 		}
-
-
-	
-		
+				
 
         if (timer >= 1) {
             //if (Random.Range(1, civilisation.values.birthRate) == civilisation.values.birthRate) GiveBirth();
