@@ -36,6 +36,17 @@ public class PlayerInputController : MonoBehaviour {
 		foreach (Controller cont in controllers) {
 			SteamVR_Controller.Device c = cont.controller;
 
+			if (c.GetPress(SteamVR_Controller.ButtonMask.ApplicationMenu)) {
+				
+			}
+
+			if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
+				if (c.GetAxis() != Vector2.zero) {
+					worldObj.RotateAround(worldObj.position, cont.trackedObj.transform.right, c.GetAxis().y * viveSwipeSensitivity * Time.deltaTime);
+					worldObj.RotateAround(worldObj.position, cont.trackedObj.transform.up, -c.GetAxis().x * viveSwipeSensitivity * Time.deltaTime);
+				}
+			}
+
 			if (c.GetHairTrigger())
 			{
 				RaycastHit hit;
@@ -45,6 +56,18 @@ public class PlayerInputController : MonoBehaviour {
 					{
 						CivilisationController civ = hit.collider.GetComponent<CivilisationController>();
 						civ.TakeHit(cont.type);
+					}
+				}
+			}
+
+			if (c.GetHairTriggerDown()) {
+				RaycastHit hit;
+
+				if (Physics.Raycast(cont.trackedObj.transform.position, cont.trackedObj.transform.forward, out hit)) {
+					if (hit.collider.tag == "Civilisation")
+					{
+						CivilisationController civ = hit.collider.GetComponent<CivilisationController>();
+						civ.DoShot(cont.type);
 					}
 				}
 			}
