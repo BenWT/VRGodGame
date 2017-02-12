@@ -9,29 +9,28 @@ public class WorkerController : MonoBehaviour {
 	public bool planetGravity = true;
 	int index;
     float timer;
-    Vector3 gravityDirection;
+    Vector3 gravityDirection, direction;
 
 	public void Setup(int index) {
         this.index = index;
         timer += Random.Range(0.0f, 1.0f);
+		direction = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
 
-    }
+	}
 
     void Update() {
-		// TODO Move around constraints of civ
 
-		/*	Random rnd = new Random();
-			int direction = rnd.Next(1, 5);
-
-			Vector3 newPosition = new Vector3(-1, 0, 0) * (moveSpeed * Time.deltaTime);
-			newPosition = transform.position + newPosition;
-			newPosition.x = Mathf.Clamp(newPosition.x, -101, 126);
-			transform.position = newPosition;*/
+		Vector3 newPosition = new Vector3(-1, 0, 0) * (moveSpeed * Time.deltaTime);
+		newPosition = transform.position + newPosition;
+		newPosition.x = Mathf.Clamp(newPosition.x, -101, 126);
+		transform.position = newPosition;
 
 		if (planetGravity)
 		{
 			gravityDirection = (transform.position - civilisation.planet.position).normalized;
 			transform.LookAt(civilisation.planet, transform.up);
+
+			transform.localPosition += direction * (moveSpeed * Time.deltaTime);
 
 			Vector3 difference = transform.position - civilisation.planet.position;
 			float mag = difference.magnitude;
