@@ -25,22 +25,28 @@ public class PlayerInputController : MonoBehaviour {
 		}
 	}
 
-	/* if (controller.GetAxis() != Vector2.zero) Debug.Log(gameObject.name + controller.GetAxis());
-	if (controller.GetHairTriggerDown()) Debug.Log(gameObject.name + " Trigger Press");
-	if (controller.GetHairTriggerUp()) Debug.Log(gameObject.name + " Trigger Release");
-	if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip)) Debug.Log(gameObject.name + " Grip Press");
-	if (controller.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) Debug.Log(gameObject.name + " Grip Release");
-	if (controller.GetPress(SteamVR_Controller.ButtonMask.Grip)) Debug.Log(gameObject.name + " Grip Held");*/
+	/* if (c.GetAxis() != Vector2.zero) Debug.Log(gameObject.name + controller.GetAxis());
+	if (c.GetHairTriggerDown()) Debug.Log(gameObject.name + " Trigger Press");
+	if (c.GetHairTrigger()) Debug.Log(gameObject.name + " Trigger Press");
+	if (c.GetHairTriggerUp()) Debug.Log(gameObject.name + " Trigger Release");
+	if (c.GetPressDown(SteamVR_Controller.ButtonMask.Grip)) Debug.Log(gameObject.name + " Grip Press");
+	if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) Debug.Log(gameObject.name + " Grip Hold");
+	if (c.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) Debug.Log(gameObject.name + " Grip Release"); */
 	void GetViveInputs() {
 		foreach (Controller cont in controllers) {
-			if (cont.trackedObj.enabled) {
-				SteamVR_Controller.Device c = cont.controller;
+			SteamVR_Controller.Device c = cont.controller;
 
-				if (c.GetPressDown(SteamVR_Controller.ButtonMask.Grip)) {
-					worldObj.GetComponent<HingeJoint>().connectedBody = cont.trackedObj.GetComponent<Rigidbody>();
-				}
-				if (c.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
-					worldObj.GetComponent<HingeJoint>().connectedBody = null;
+			if (c.GetHairTrigger())
+			{
+				RaycastHit hit;
+
+				if (Physics.Raycast(cont.trackedObj.transform.position, cont.trackedObj.transform.forward, out hit)) {
+					/*if (hit.collider.tag == "Civilisation")
+					{
+						CivilisationController civ = hit.collider.GetComponent<CivilisationController>();
+					}*/
+
+					hit.transform.GetComponent<Renderer>().material.color = new Color(0, 255, 0);
 				}
 			}
 		}
@@ -67,8 +73,22 @@ public class Controller {
 	public SteamVR_TrackedObject trackedObj;
 	public SteamVR_Controller.Device controller { get { return SteamVR_Controller.Input((int)trackedObj.index); } }
 	public Vector3 lastPosition;
+	public GodType type = GodType.Grab;
 
 	public Controller(GameObject contObj) {
 		trackedObj = contObj.GetComponent<SteamVR_TrackedObject>();
 	}
+}
+
+[System.Serializable]
+public enum GodType
+{
+	Rain,
+	Sun,
+	Birth,
+	Death,
+	Lightning,
+	Meteor,
+	Grab,
+	Squish
 }
