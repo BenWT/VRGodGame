@@ -7,10 +7,14 @@ public class CivilisationController : MonoBehaviour {
     public CivilisationValues values;
     GameObject workerPrefab;
     public Color32 civilisationColor;
+	public GodType requiredType = GodType.Rain;
 
-    List<WorkerController> workers = new List<WorkerController>();
+	List<WorkerController> workers = new List<WorkerController>();
     int civIndex;
     GamestateController gamestate;
+	GodType lastType = GodType.Rain;
+	float godTypeTimer = 0;
+	int godActivatedCounter = 0;
 
     public  void Setup(GamestateController gamestate, int civIndex) {
         values.Generate();
@@ -30,8 +34,45 @@ public class CivilisationController : MonoBehaviour {
     }
 
     public void KillWorker(int index) {
-        workers.RemoveAt(index);
+		if (workers.Count > 0) workers.RemoveAt(index);
     }
+
+	public void TakeHit(GodType type) {
+		if (type != lastType)
+		{
+			godTypeTimer = 0;
+			godActivatedCounter = 0;
+		}
+
+		if (godTypeTimer >= 1.0f)
+		{
+			godActivatedCounter++;
+			godTypeTimer = 0;	
+		}
+
+		if (type == requiredType)
+		{
+			if (type == GodType.Rain || type == GodType.Sun)
+			{
+				if (godActivatedCounter == 1) values.statistic += 0.1f;
+				else values.statistic -= 0.1f;
+			}
+			else if (type == GodType.Birth)
+			{
+				for (int i = 0; i < 5; i++) MakeWorker();
+			}
+			else if (type == GodType.Death)
+			{
+				for (int i = 0; i < 5; i++) KillWorker(i);
+			}
+		}
+		else
+		{
+
+		}
+
+		godTypeTimer += Time.deltaTime;
+	}
 }
 
 [System.Serializable]
