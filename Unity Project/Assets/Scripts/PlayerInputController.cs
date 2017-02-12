@@ -36,6 +36,10 @@ public class PlayerInputController : MonoBehaviour {
 		foreach (Controller cont in controllers) {
 			SteamVR_Controller.Device c = cont.controller;
 
+			if (c.GetPress(SteamVR_Controller.ButtonMask.ApplicationMenu)) {
+				
+			}
+
 			if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
 				if (c.GetAxis() != Vector2.zero) {
 					worldObj.RotateAround(worldObj.position, cont.trackedObj.transform.right, c.GetAxis().y * viveSwipeSensitivity * Time.deltaTime);
