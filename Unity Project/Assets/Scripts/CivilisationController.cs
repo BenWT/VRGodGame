@@ -15,13 +15,17 @@ public class CivilisationController : MonoBehaviour {
 	GodType lastType = GodType.None;
 	float godTypeTimer = 0;
 	int godActivatedCounter = 0;
-	
+
 	float noneTypeTimer = 0;
-	int nonePause = Random.Range(3,15);
+	int nonePause;
 	float tickDownTimer = 0;
 	int randInt = 0;
 
-	public  void Setup(GamestateController gamestate, int civIndex) {
+    void Start() {
+        nonePause = Random.Range(3,15);
+    }
+
+	public void Setup(GamestateController gamestate, int civIndex) {
         values.Generate();
 
         for (int i = 0; i < values.initialWorkerCount; i++) {
@@ -223,7 +227,7 @@ public class CivilisationController : MonoBehaviour {
 
 	public void DoShot(GodType type)
 	{
-	
+
 		if (type == GodType.Lightning)
 		{
 			int amount = Random.Range(2, 6);
