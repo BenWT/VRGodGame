@@ -9,6 +9,7 @@ public class PlayerInputController : MonoBehaviour {
 
 	public float mouseSwipeSensitivity = 100.0f, viveSwipeSensitivity = 1000.0f;
 	Vector3 swipeDirection;
+	float menuNavigationTimer;
 
 	void Awake() {
 		if (leftContObj) controllers.Add(new Controller(leftContObj));
@@ -36,14 +37,23 @@ public class PlayerInputController : MonoBehaviour {
 		foreach (Controller cont in controllers) {
 			SteamVR_Controller.Device c = cont.controller;
 
-			if (c.GetPress(SteamVR_Controller.ButtonMask.ApplicationMenu)) {
-				
+			if (c.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu)) {
+				cont.inMenu != cont.interface;
 			}
 
-			if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
-				if (c.GetAxis() != Vector2.zero) {
+			if (c.GetAxis() != Vector2.zero) {
+				if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
 					worldObj.RotateAround(worldObj.position, cont.trackedObj.transform.right, c.GetAxis().y * viveSwipeSensitivity * Time.deltaTime);
 					worldObj.RotateAround(worldObj.position, cont.trackedObj.transform.up, -c.GetAxis().x * viveSwipeSensitivity * Time.deltaTime);
+				}
+				else if (cont.inMenu) {
+					if (c.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
+						if (c.GetAxis().x > 0.2f) {
+							Debug.Log("Touchpad click right");
+						} else if (c.GetAxis().x < -0.2f) {
+							Debug.Log("Touchpad click left");
+						}
+					}
 				}
 			}
 
@@ -96,6 +106,7 @@ public class Controller {
 	public SteamVR_Controller.Device controller { get { return SteamVR_Controller.Input((int)trackedObj.index); } }
 	public Vector3 lastPosition;
 	public GodType type = GodType.Grab;
+	public bool inMenu = false;
 
 	public Controller(GameObject contObj) {
 		trackedObj = contObj.GetComponent<SteamVR_TrackedObject>();
