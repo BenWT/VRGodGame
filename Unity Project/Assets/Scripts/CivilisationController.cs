@@ -15,13 +15,17 @@ public class CivilisationController : MonoBehaviour {
 	GodType lastType = GodType.None;
 	float godTypeTimer = 0;
 	int godActivatedCounter = 0;
-	
+
 	float noneTypeTimer = 0;
-	int nonePause = Random.Range(3,15);
+	int nonePause;
 	float tickDownTimer = 0;
 	int randInt = 0;
 
-	public  void Setup(GamestateController gamestate, int civIndex) {
+    void Start() {
+        nonePause = Random.Range(3,15);
+    }
+
+	public void Setup(GamestateController gamestate, int civIndex) {
         values.Generate();
 
         for (int i = 0; i < values.initialWorkerCount; i++) {
@@ -29,7 +33,7 @@ public class CivilisationController : MonoBehaviour {
         }
     }
 
-	private void Update()
+	void Update()
 	{
 
 		if (requiredType == GodType.None) {
@@ -106,6 +110,22 @@ public class CivilisationController : MonoBehaviour {
 			}
 
 		}
+
+		if (gamestate.isLowest(this))
+		{
+			int rand = Random.Range(1, 600);
+			if (rand == 600)
+			{
+				int chosenIndex = gamestate.getHighest(this);
+				CivilisationController targetCiv = gamestate.civilisations[chosenIndex];
+				targetCiv.values.statistic -= 0.8f;
+				values.statistic += 0.3f;
+				//TODO Get animation of lowest civ attacking targetCiv
+			}
+		}
+
+		if (values.statistic >= 1.0f) values.statistic = 1.0f;
+		if (values.statistic <= -1.0f) values.statistic = -1.0f;
 	}
 
     public void MakeWorker() {
@@ -207,7 +227,7 @@ public class CivilisationController : MonoBehaviour {
 
 	public void DoShot(GodType type)
 	{
-	
+
 		if (type == GodType.Lightning)
 		{
 			int amount = Random.Range(2, 6);

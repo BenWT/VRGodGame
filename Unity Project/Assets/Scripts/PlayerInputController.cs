@@ -36,8 +36,13 @@ public class PlayerInputController : MonoBehaviour {
 		foreach (Controller cont in controllers) {
 			SteamVR_Controller.Device c = cont.controller;
 
-			if (c.GetPress(SteamVR_Controller.ButtonMask.ApplicationMenu)) {
-				
+			if (c.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu)) {
+				if (cont.inMenu) cont.inMenu = false;
+				else cont.inMenu = true;
+			}
+
+			if (cont.inMenu) {
+				Debug.Log("In Menu");
 			}
 
 			if (c.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
@@ -96,6 +101,7 @@ public class Controller {
 	public SteamVR_Controller.Device controller { get { return SteamVR_Controller.Input((int)trackedObj.index); } }
 	public Vector3 lastPosition;
 	public GodType type = GodType.Grab;
+	public bool inMenu = false;
 
 	public Controller(GameObject contObj) {
 		trackedObj = contObj.GetComponent<SteamVR_TrackedObject>();
