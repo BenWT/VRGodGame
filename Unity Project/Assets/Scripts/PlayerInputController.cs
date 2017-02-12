@@ -82,6 +82,7 @@ public class Controller {
 [System.Serializable]
 public enum GodType
 {
+	None,
 	Rain,
 	Sun,
 	Birth,
