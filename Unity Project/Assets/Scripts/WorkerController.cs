@@ -33,7 +33,7 @@ public class WorkerController : MonoBehaviour {
 		if (planetGravity)
 		{
 			transform.position += transform.up * Time.deltaTime * direction.x;
-			transform.position += transform.right * Time.deltaTime * direction.y;
+			//transform.position += transform.right * Time.deltaTime * direction.y;
 
 			gravityDirection = (transform.position - civilisation.planet.position).normalized;
 			transform.LookAt(civilisation.planet, transform.up);
